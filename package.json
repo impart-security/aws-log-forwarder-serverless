@@ -11,11 +11,11 @@
     "lint": "eslint . --cache --ext .js --max-warnings=0"
   },
   "dependencies": {
-    "aws-sdk": "^2.1467.0",
-    "axios": "^1.5.1"
+    "aws-sdk": "^2.1485.0",
+    "axios": "^1.6.0"
   },
   "devDependencies": {
-    "eslint": "^8.50.0",
+    "eslint": "^8.52.0",
     "prettier": "^3.0.2"
   }
 }
