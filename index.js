@@ -11,7 +11,6 @@ const gunzip = util.promisify(zlib.gunzip);
 const apiBaseUrl = process.env.API_BASE_URL ?? "https://api.impartsecurity.net/v0";
 const accessTokenParameter = process.env.ACCESS_TOKEN_PARAMETER_NAME;
 const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET_NAME;
-const logstreamId = process.env.LOGSTREAM_ID;
 
 const EventTypes = {
   CloudWatch: 0,
@@ -43,12 +42,7 @@ const fetchSecret = async () => {
 const accessToken = accessTokenParameter? await fetchParameter() : await fetchSecret();
 
 export const handler = async (event, context, callback) => {
-  if (!logstreamId) {
-    const err = "missing LOGSTREAM_ID env variable";
-    console.log(err);
-    callback(err);
-    return;
-  }
+  let logstreamId = process.env.LOGSTREAM_ID;
 
   const arr = accessToken.split(".");
   if (arr.length < 2){
@@ -64,26 +58,46 @@ export const handler = async (event, context, callback) => {
   const readableStream = new Stream.Readable( {
     read( ) { }
   })
-  let lineCount = 0;
 
+  let lineCount = 0;
+  let parsedRequest = null;
   let eventType = 0;
   if (event.awslogs) {
     eventType = EventTypes.CloudWatch;
+    console.log("awslogs event");
+    const payload = new Buffer.from(event.awslogs.data, "base64");
+    const result = await gunzip(payload);
+    parsedRequest = JSON.parse(result.toString("utf8"));
+    if (!logstreamId){
+      logstreamId = encodeURIComponent(`${parsedRequest.owner}:${parsedRequest.logGroup}`);
+    }
   } else if (event.Records[0].s3) {
     eventType = EventTypes.S3;
+    console.log(`S3 bucket: ${event.Records[0].s3.bucket.name}`);
+    if (!logstreamId){
+      logstreamId = encodeURIComponent(`${event.Records[0].s3.bucket.name}`);
+    }
   }
   else {
      callback("unsupported event type");
      return;
   }
 
+  if (!logstreamId) {
+    const err = "missing LOGSTREAM_ID env variable";
+    console.log(err);
+    callback(err);
+    return;
+  }
+
   const url = `${apiBaseUrl}/orgs/${orgId}/logstream/${logstreamId}`;
+
   //initiate send stream request
   const promise = axios.post(url, readableStream, {
     headers: {
       'Authorization': `Bearer ${accessToken}`,
       'Content-Type': 'application/octet-stream',
-      'User-Agent': 'aws-labmda-forwarder'
+      'User-Agent': 'aws-lambda-forwarder'
     },
   }).then(() => {
     console.log(`sent ${lineCount} lines for inspection`);
@@ -96,10 +110,6 @@ export const handler = async (event, context, callback) => {
 
   switch (eventType) {
     case EventTypes.CloudWatch: {
-      console.log("awslogs event");
-      const payload = new Buffer.from(event.awslogs.data, "base64"); // decode base64 to binary
-      const result = await gunzip(payload);
-      const parsedRequest = JSON.parse(result.toString("utf8"));
 
       for (let i = 0; i < parsedRequest.logEvents.length; i++) {
         if (
@@ -122,7 +132,6 @@ export const handler = async (event, context, callback) => {
     }
     case EventTypes.S3: {
       const bucket = event.Records[0].s3.bucket.name;
-      console.log("S3 bucket: ", bucket);
       const key = decodeURIComponent(
         event.Records[0].s3.object.key.replace(/\+/g, " "),
       );
