@@ -8,14 +8,16 @@
   "license": "Apache-2.0",
   "scripts": {
     "format": "prettier . --write --cache",
-    "lint": "eslint . --cache --ext .js --max-warnings=0"
+    "lint": "eslint . --cache --max-warnings=0"
   },
   "dependencies": {
-    "aws-sdk": "^2.1509.0",
-    "axios": "^1.6.2"
+    "aws-sdk": "^2.1651.0",
+    "axios": "^1.7.2"
   },
   "devDependencies": {
-    "eslint": "^8.54.0",
-    "prettier": "^3.1.0"
+    "@eslint/js": "^9.6.0",
+    "eslint": "^8.57.0",
+    "globals": "^15.7.0",
+    "prettier": "^3.3.2"
   }
 }

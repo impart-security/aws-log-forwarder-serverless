@@ -1,4 +1,3 @@
-
 # AWS log forwarder serverless
 
 Lambda function to stream ec2 loadbalancer access logs and cloudwatch logs without hosting local impart inspector service.
@@ -18,13 +17,16 @@ Lambda function to stream ec2 loadbalancer access logs and cloudwatch logs witho
    - http_method - request http method
 
 4. Configure aws forwarder lambda function with the environment variables:
+
 ```
 ACCESS_TOKEN_PARAMETER_NAME: "<parameter store name from the step(2)>"
 LOGSTREAM_ID: "<from the logbinding setup step(3)>"
 ```
+
 or
+
 ```
-ACCESS_TOKEN_SECRET_NAME: "<secrets manager secret name from the step(2)>" 
+ACCESS_TOKEN_SECRET_NAME: "<secrets manager secret name from the step(2)>"
 LOGSTREAM_ID: "<from the logbinding setup step(3)>"
 ```
 
@@ -45,7 +47,3 @@ $context.requestTime "$context.httpMethod $context.path $context.protocol" $cont
 ```
 %{HTTPDATE:timestamp} "(?:%{WORD:http_method}|-) (?:%{GREEDYDATA:request}|-) (?:HTTP/%{NUMBER:http_version}|-( )?)" (?:%{NUMBER:response_code}|-)
 ```
-
-
-
-

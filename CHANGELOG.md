@@ -1,11 +1,10 @@
-
 # Changelog
 
-## [0.1.0] - 2023-10-23
+## [0.3.0] - 2024-07-10
 
-### Added
+### Changed
 
-- Initial release
+- Update npm dependencies
 
 ## [0.2.0] - 2023-11-30
 
@@ -13,3 +12,8 @@
 
 - Automatically set logstream id
 
+## [0.1.0] - 2023-10-23
+
+### Added
+
+- Initial release

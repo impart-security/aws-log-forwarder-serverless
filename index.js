@@ -75,8 +75,13 @@ export const handler = async (event, context, callback) => {
     eventType = EventTypes.S3;
     console.log(`S3 bucket: ${event.Records[0].s3.bucket.name}`);
     if (!logstreamId){
-      logstreamId = encodeURIComponent(`${event.Records[0].s3.bucket.name}`);
+      logstreamId = event.Records[0].s3.bucket.name;
+      if (!event.Records[0].s3.object.key.startsWith("AWSLogs/")){
+        let prefix = event.Records[0].s3.object.key.split("/AWSLogs/")[0];
+        logstreamId = `${logstreamId}/${prefix}`;
+      }
     }
+    logstreamId = encodeURIComponent(logstreamId);
   }
   else {
      callback("unsupported event type");
