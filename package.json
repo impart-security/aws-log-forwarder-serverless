@@ -1,23 +1,35 @@
 {
   "name": "@impart-security/aws-log-forwarder-serverless",
-  "version": "0.1.0",
+  "version": "0.3.1",
   "description": "Lambda function to stream ec2 loadbalancer access logs and cloudwatch logs",
   "main": "index.js",
   "type": "module",
   "author": "Impart Security",
   "license": "Apache-2.0",
   "scripts": {
+    "test": "echo 'No test specified'",
+    "dep-check": "pnpm depcheck-custom",
+    "circular-check": "madge --circular .",
+    "type-check": "tsc --noEmit",
     "format": "prettier . --write --cache",
-    "lint": "eslint . --cache --max-warnings=0"
+    "lint": "eslint ."
   },
   "dependencies": {
-    "aws-sdk": "^2.1651.0",
-    "axios": "^1.7.2"
+    "@aws-sdk/client-s3": "3.723.0",
+    "@aws-sdk/client-secrets-manager": "3.723.0",
+    "@aws-sdk/client-ssm": "3.723.0",
+    "axios": "1.7.9"
   },
   "devDependencies": {
-    "@eslint/js": "^9.6.0",
-    "eslint": "^8.57.0",
-    "globals": "^15.7.0",
-    "prettier": "^3.3.2"
+    "@eslint/js": "9.17.0",
+    "eslint": "9.17.0",
+    "globals": "15.14.0",
+    "prettier": "3.4.2"
+  },
+  "nx": {
+    "projectType": "application",
+    "tags": [
+      "scope:javascript"
+    ]
   }
 }

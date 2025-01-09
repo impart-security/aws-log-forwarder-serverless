@@ -1,8 +1,0 @@
-{
-  "ignore": {
-    "eslint": {
-      "versions": ">8",
-      "reason": "we are on eslint 8"
-    }
-  }
-}

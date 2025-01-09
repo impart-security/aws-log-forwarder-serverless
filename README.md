@@ -4,7 +4,7 @@ Lambda function to stream ec2 loadbalancer access logs and cloudwatch logs witho
 
 ## Logstream ingestion configuration
 
-1. Create logstream access token. Open https://console.impartsecurity.net/orgs/_/settings/tokens => New API acces token => select scopes: `read:inspector_settings`, `write:inspector_metrics`, `write:org_logstream`
+1. Create logstream access token. Open https://console.impartsecurity.net/orgs/_/access-tokens => New API acces token => select scopes: `read:inspector_settings`, `write:inspector_metrics`, `write:org_logstream`
 2. Add access token to the aws parameter store or secret manager
 3. Create a [Log Binding](https://console.impartsecurity.net/orgs/_/log-bindings).
    Specify grok pattern for the expected log format.

@@ -1,4 +1,11 @@
+
 # Changelog
+
+## [0.3.1] - 2024-01-09
+
+### Changed
+
+- Update npm dependencies
 
 ## [0.3.0] - 2024-07-10
 
@@ -17,3 +24,4 @@
 ### Added
 
 - Initial release
+
